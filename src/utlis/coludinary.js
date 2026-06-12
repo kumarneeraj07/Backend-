@@ -24,4 +24,21 @@ const uploadOnCloudnairy = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudnairy };
+// Delete an asset from Cloudinary using its full URL.
+// Cloudinary needs the "public_id" (the file name without extension), so we
+// derive it from the last segment of the URL.
+const deleteFromCloudnairy = async (fileUrl, resourceType = "image") => {
+  try {
+    if (!fileUrl) return null;
+
+    const publicId = fileUrl.split("/").pop().split(".")[0];
+    const response = await cloudinary.uploader.destroy(publicId, {
+      resource_type: resourceType,
+    });
+    return response;
+  } catch (error) {
+    return null;
+  }
+};
+
+export { uploadOnCloudnairy, deleteFromCloudnairy };
